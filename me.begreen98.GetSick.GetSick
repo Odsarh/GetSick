@@ -1,0 +1,52 @@
+package me.begreen98.GetSick;
+
+import java.util.logging.Logger;
+
+import me.begreen98.GetSick.GetSick;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+public class GetSick extends JavaPlugin{
+  public final Logger logger = Logger.getLogger("Minecraft");
+	public static GetSick plugin;
+
+	@Override
+	public void onDisable(){
+		PluginDescriptionFile pdfFile = this.getDescription();
+		this.logger.info(pdfFile.getName() + " has been disabled!");
+	}
+
+	@Override
+	public void onEnable(){
+		PluginDescriptionFile pdfFile = this.getDescription();
+		this.logger.info(pdfFile.getName() + " Version " + pdfFile.getVersion() + " has been enabled!");
+	}
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
+        Player player = (Player) sender;
+        if(commandLabel.equalsIgnoreCase("sick")){
+        	if(args.length == 0){
+        		player.sendMessage(ChatColor.GRAY + "You have made yourself sick!");
+        	player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
+                    500, 3));
+        	 }else if(args.length == 1){
+        		 if(player.getServer().getPlayer(args[0])!=null){
+        	Player targetPlayer = player.getServer().getPlayer(args [0]);
+        	player.sendMessage(ChatColor.GRAY + "You have made " + targetPlayer.getName() + " sick!");
+        	targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
+                    500, 3));
+        	targetPlayer.sendMessage(ChatColor.GRAY + "You have been made sick by " + player.getName() + "!");    
+        	 }else{
+        		 player.sendMessage(ChatColor.DARK_RED + "Player not online!");
+        	 }
+}
+	}
+		return false;
+}
+}
