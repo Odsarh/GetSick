@@ -1,0 +1,11 @@
+name: GetSick
+main: me.begreen98.GetSick.GetSick
+version: 2.0
+description: >
+            Get Sick Plugin
+commands:
+  sick:
+    description: Makes someone sick!
+  cure:
+    description: Cures someone from their sickness!
+    
