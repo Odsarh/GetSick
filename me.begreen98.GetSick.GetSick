@@ -56,15 +56,18 @@ public class GetSick extends JavaPlugin{
                  player.removePotionEffect(PotionEffectType.CONFUSION);
                  player.sendMessage(ChatColor.GRAY + "You have been cured!");
         		 }else if(args.length == 1){
+        			 if(player.getServer().getPlayer(args[0])!=null){
         			 Player targetPlayer = player.getServer().getPlayer(args [0]);
                      targetPlayer.removePotionEffect(PotionEffectType.CONFUSION);
                      targetPlayer.removePotionEffect(PotionEffectType.HUNGER);
                      targetPlayer.sendMessage(ChatColor.GRAY + "You have been made cured by " + player.getName() + "!");
                      player.sendMessage(ChatColor.GRAY + "You have cured " + targetPlayer.getName() + "!");
-        			 
-        	 }
+        			  }else{
+        				  player.sendMessage(ChatColor.DARK_RED + "Player not online!");
+        			  }
         		 
 }
-		return false;
 }
+		return false;
+	}
 }
