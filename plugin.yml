@@ -4,8 +4,11 @@ version: 2.0
 description: >
             Get Sick Plugin
 commands:
-  sick:
-    description: Makes someone sick!
-  cure:
-    description: Cures someone from their sickness!
-    
+   sick:
+      description: This is a demo command.
+      permission: GetSick.sick
+      permission-message: You don't have permission to make people sick!
+   cure:
+      description: This is a demo command.
+      permission: GetSick.cure
+      permission-message: You don't have permission to cure people!
