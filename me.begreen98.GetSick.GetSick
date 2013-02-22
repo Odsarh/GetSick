@@ -4,100 +4,120 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import me.begreen98.GetSick.GetSick;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class GetSick extends JavaPlugin{
+public class GetSick extends JavaPlugin {
 	public final Logger logger = Logger.getLogger("Minecraft");
 	public static GetSick plugin;
 
 	@Override
-	public void onDisable(){
-		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info(pdfFile.getName() + " has been disabled!");
+	public void onDisable() {
 	}
 
 	@Override
-	public void onEnable(){
-		PluginDescriptionFile pdfFile = this.getDescription();
-		try{
-			this.logger.info(pdfFile.getName() + " Version " + pdfFile.getVersion() + " has been enabled!");
-		saveConfig();
-		setupConfig(getConfig());
-		saveConfig();
-		}catch(Exception e){
+	public void onEnable() {
+		try {
+			saveConfig();
+			setupConfig(getConfig());
+			saveConfig();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
-        Player player = (Player) sender;
-        if(commandLabel.equalsIgnoreCase("sick")){
-        	if(args.length == 0){
-        		
-        		player.sendMessage(ChatColor.GRAY + "You have made yourself sick!");
-        	player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
-                    500, 3));
-        	player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,
-                    500, 1));
-        	if (getConfig().getString("Effects.HurtFromSick").equals("true")){
-        		player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,
-                        500, 1));
-        	}
-        }else if(args.length == 1){
-        		 if(player.getServer().getPlayer(args[0])!=null){
-        	Player targetPlayer = player.getServer().getPlayer(args [0]);
-        	player.sendMessage(ChatColor.GRAY + "You have made " + targetPlayer.getName() + " sick!");
-        	targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,
-                    500, 3));
-        	targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,
-                    500, 1));
-        	targetPlayer.sendMessage(ChatColor.GRAY + "You have been made sick by " + player.getName() + "!");  
-        	 }
-        		 if (getConfig().getString("Effects.HurtFromSick").equals("true")){
-             		player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,
-                             500, 1));
-             	}else{
-        		 player.sendMessage(ChatColor.DARK_RED + "Player not online!");
-        	 }
-        }
-        	 }else if(commandLabel.equalsIgnoreCase("cure")){
-        		 if(args.length == 0){
-        		 player.removePotionEffect(PotionEffectType.HUNGER);
-                 player.removePotionEffect(PotionEffectType.CONFUSION);
-                 player.removePotionEffect(PotionEffectType.POISON);
-                 player.sendMessage(ChatColor.GRAY + "You have been cured!");
-        		 }else if(args.length == 1){
-        			 if(player.getServer().getPlayer(args[0])!=null){
-        			 Player targetPlayer = player.getServer().getPlayer(args [0]);
-                     targetPlayer.removePotionEffect(PotionEffectType.CONFUSION);
-                     targetPlayer.removePotionEffect(PotionEffectType.HUNGER);
-                     targetPlayer.removePotionEffect(PotionEffectType.POISON);
-                     targetPlayer.sendMessage(ChatColor.GRAY + "You have been made cured by " + player.getName() + "!");
-                     player.sendMessage(ChatColor.GRAY + "You have cured " + targetPlayer.getName() + "!");
-        			  }else{
-        				  player.sendMessage(ChatColor.DARK_RED + "Player not online!");
-        			  }
-        		 
-}
-}
+
+	@Override
+	public boolean onCommand(CommandSender sender, Command commandLabel,
+			String commandlabel, String[] args) {
+
+		if (commandLabel.getName().equalsIgnoreCase("sick")) {
+			if (args.length == 0) {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					sender.sendMessage(ChatColor.GRAY
+							+ "You have made yourself sick!");
+					player.addPotionEffect(new PotionEffect(
+							PotionEffectType.CONFUSION, 500, 3));
+					player.addPotionEffect(new PotionEffect(
+							PotionEffectType.HUNGER, 500, 1));
+					if (getConfig().getString("Effects.HurtFromSick").equals(
+							"true")) {
+						player.addPotionEffect(new PotionEffect(
+								PotionEffectType.POISON, 500, 1));
+					}
+				}
+			} else if (args.length == 1) {
+				Player targetPlayer = sender.getServer().getPlayer(args[0]);
+				if (sender.getServer().getPlayer(args[0]) != null) {
+					sender.sendMessage(ChatColor.GRAY + "You have made "
+							+ targetPlayer.getName() + " sick!");
+					targetPlayer.addPotionEffect(new PotionEffect(
+							PotionEffectType.CONFUSION, 500, 3));
+					targetPlayer.addPotionEffect(new PotionEffect(
+							PotionEffectType.HUNGER, 500, 1));
+					targetPlayer.sendMessage(ChatColor.GRAY
+							+ "You have been made sick by " + sender.getName()
+							+ "!");
+
+					if (getConfig().getString("Effects.HurtFromSick").equals(
+							"true")) {
+						targetPlayer.addPotionEffect(new PotionEffect(
+								PotionEffectType.POISON, 500, 1));
+					}
+				} else {
+					sender.sendMessage(ChatColor.DARK_RED
+							+ "Player not online!");
+				}
+			}
+		} else if (commandLabel.getName().equalsIgnoreCase("cure")) {
+			if (args.length == 1) {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					player.removePotionEffect(PotionEffectType.CONFUSION);
+					player.removePotionEffect(PotionEffectType.HUNGER);
+					if (getConfig().getString("Effects.HurtFromSick").equals(
+							"true")) {
+						player.removePotionEffect(PotionEffectType.POISON);
+					}
+				} else if (args.length == 1) {
+					Player targetPlayer = sender.getServer().getPlayer(args[0]);
+					if (sender.getServer().getPlayer(args[0]) != null) {
+						targetPlayer
+								.removePotionEffect(PotionEffectType.CONFUSION);
+						targetPlayer
+								.removePotionEffect(PotionEffectType.HUNGER);
+						if (getConfig().getString("Effects.HurtFromSick")
+								.equals("true")) {
+							targetPlayer
+									.removePotionEffect(PotionEffectType.POISON);
+						}
+						sender.sendMessage(ChatColor.GRAY + "You have cured "
+								+ targetPlayer.getDisplayName() + "!");
+						targetPlayer.sendMessage(ChatColor.GRAY
+								+ "You have been cured by " + sender.getName()
+								+ "!");
+					} else {
+						sender.sendMessage(ChatColor.DARK_RED
+								+ "Player not found!");
+					}
+				}
+			}
+		}
 		return false;
 	}
+
 	private void setupConfig(FileConfiguration config) throws IOException {
-		if(!new File(getDataFolder(), "RESET.FILE").exists()){
-			
+		if (!new File(getDataFolder(), "RESET.FILE").exists()) {
+
 			config.set("Effects.HurtFromSick", "true");
 
 			new File(getDataFolder(), "RESET.FILE").createNewFile();
-}
+		}
 	}
-}
 }
